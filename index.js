@@ -50,13 +50,16 @@ app.init = async () => {
     // ** 3. ** _Isspausdinti, brangiausio grybo pavadinima_
 
     sql = 'SELECT `mushroom` as name, `price`\
-            FROM`mushroom` \
-            ORDER BY `price` DESC;';
+    FROM`mushroom` \
+    ORDER BY `price` DESC;';
+
+    //arba:
+    //sql = 'SELECT MAX(price) AS LargestPrice, `mushroom` FROM `mushroom`'; pigesnis budas uzklausai del vieno vienintelio is DB objekto.
 
     [rows] = await connection.execute(sql);
 
     console.log('********************************');
-    console.log(`Brangiausias grybas yra: ${rows[0].name}.`);
+    console.log(`Brangiausias grybas yra: ${capitalize(rows[0].name)}.`);
 
     //**4.** _Isspausdinti, pigiausio grybo pavadinima_
     const last = rows.length - 1;
