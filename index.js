@@ -14,9 +14,10 @@ app.init = async () => {
     let rows = [];
 
     // LOGIC BELOW
-    sql = 'SELECT * FROM `mushroom`';
-    [rows] = await connection.execute(sql);
-    // console.log(rows);
+
+    function capitalize(str) {
+        return str[0].toUpperCase() + str.slice(1)
+    }
 
     // ** 1. ** _Isspausdinti, visu grybu pavadinimus ir ju kainas, grybus isrikiuojant nuo brangiausio link pigiausio_
 
@@ -31,7 +32,7 @@ app.init = async () => {
     let count = 0;
     let allMushrooms = [];
     for (const { mushroom, price } of rows) {
-        allMushrooms.push(`${++count}. ${mushroom[0].toUpperCase()}${mushroom.slice(1)} - ${price} EUR/kg`)
+        allMushrooms.push(`${++count}. ${capitalize(mushroom)} - ${price} EUR/kg`)
     }
     console.log(allMushrooms.join('\n'));
 
@@ -73,7 +74,7 @@ app.init = async () => {
     count = 0;
     allMushrooms = [];
     for (const { mushroom, kiekis } of rows) {
-        allMushrooms.push(`${++count}) ${mushroom} - ${(+kiekis).toFixed(1)}`)
+        allMushrooms.push(`${++count}) ${capitalize(mushroom)} - ${(+kiekis).toFixed(1)}`)
     }
     console.log('*****************************');
     console.log('Grybai:');
