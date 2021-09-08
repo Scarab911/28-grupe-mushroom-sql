@@ -190,23 +190,36 @@ app.init = async () => {
     //**9** _Isspausdinti, visus grybus, kuriu ivertinimas geresnis arba lygus 4 zvaigzdutem, isrikiuotus gerejimo tvarka_
 
     sql = 'SELECT `mushroom` as name, `rating`\
-    FROM `mushroom` ORDER BY `rating` ASC' ;
+    FROM `mushroom`\
+    WHERE `rating` >= 4\
+    ORDER BY `rating` ASC' ;
 
     [rows] = await connection.execute(sql);
 
     let mushroomList = [];
 
     for (let { name, rating } of rows) {
-        if (rating >= 4) {
-            mushroomList.push(capitalize(name))
-        }
+        mushroomList.push(capitalize(name))
     }
+    console.log('');
     console.log(`Grybai: ${mushroomList.join(', ')}.`);
 
     //**10** _Isspausdinti, visus grybus, kuriu ivertinimas yra viena is nurodytu reiksmiu: 1, 3 arba 5 zvaigzdutem, isrikiuotus gerejimo tvarka_
 
+    sql = 'SELECT `mushroom` as name, `rating`\
+    FROM `mushroom`\
+    WHERE rating IN (1,3,5) \
+    ORDER BY `rating` ASC' ;
 
+    [rows] = await connection.execute(sql);
+    console.log(rows);
+    mushroomList = [];
 
+    for (let { name, rating } of rows) {
+        mushroomList.push(capitalize(name))
+    }
+    console.log('');
+    console.log(`Grybai: ${mushroomList.join(', ')}.`);
 }
 
 app.init();
