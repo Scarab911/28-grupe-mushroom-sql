@@ -166,13 +166,46 @@ app.init = async () => {
         if (lang === 'lt') {
 
             console.log(`Grybu kiekis pagal ivertinima:`);
-            for () {
-                console.log(`5 zvaigzdutes (labai gerai) - 5 grybai`);
+            for (let { id, name_lt, amount } of rows) {
+                if (amount == null) {
+                    amount = 0;
+                }
+                console.log(`${id} zvaigzdutes (${name_lt}) - ${amount} grybai`);
+            }
+        } else {
+            console.log('');
+            console.log(`Mushrooms count by rating:`);
+            for (let { id, name_en, amount } of rows) {
+                if (amount == null) {
+                    amount = 0;
+                }
+                console.log(`${id} stars (${name_en}) - ${amount} grybai`);
             }
         }
     }
-    mushroomByRating('lt');
-    mushroomByRating('en');
+    await mushroomByRating('lt');
+    console.log(``);
+    await mushroomByRating('en');
+
+    //**9** _Isspausdinti, visus grybus, kuriu ivertinimas geresnis arba lygus 4 zvaigzdutem, isrikiuotus gerejimo tvarka_
+
+    sql = 'SELECT `mushroom` as name, `rating`\
+    FROM `mushroom` ORDER BY `rating` ASC' ;
+
+    [rows] = await connection.execute(sql);
+
+    let mushroomList = [];
+
+    for (let { name, rating } of rows) {
+        if (rating >= 4) {
+            mushroomList.push(capitalize(name))
+        }
+    }
+    console.log(`Grybai: ${mushroomList.join(', ')}.`);
+
+    //**10** _Isspausdinti, visus grybus, kuriu ivertinimas yra viena is nurodytu reiksmiu: 1, 3 arba 5 zvaigzdutem, isrikiuotus gerejimo tvarka_
+
+
 
 }
 
