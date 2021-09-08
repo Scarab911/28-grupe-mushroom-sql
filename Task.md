@@ -1,4 +1,4 @@
-# Taxi
+# Mushroom
 
 ## Pasiruosimas
 
@@ -49,6 +49,20 @@ Lentele uzpildyti tokia informacija (eiliskumas atitinka struktura):
 - 2; 3; 10;
 - 3; 5; 8;
 - 2; 1; 2;
+
+Duombazeje reikalinga lentele "ratings", kurios struktura:
+
+- id (skaicius, desimtzenklis sveikasis)
+- name_lt (tekstas, 20 simboliu) - lietuviskas vertimas
+- name_en (tekstas, 20 simboliu) - angliskas vertimas
+
+Lentele uzpildyti tokia informacija (eiliskumas atitinka struktura):
+
+- 1; labai prastai; very bad;
+- 2; prastai; bad;
+- 3; normaliai; ok;
+- 4; gerai; good;
+- 5; labai gerai; perfect;
 
 ## Uzduotys
 
@@ -106,4 +120,24 @@ Grybu krepselio kainos pas grybautoja:
 1) Vardenis - 20 EUR
 2) Vardenis - 15.75 EUR
 3) Vardenis - 7 EUR
+```
+
+**8** _Isspausdinti, kiek nuo geriausiai vertinamu iki blogiausiai vertinamu grybu yra surinkta. Spausdinima turi atlikti funkcija (pavadinimu `mushroomsByRating()`), kuri gauna vieninteli parametra - kalbos pavadinima, pagal kuria reikia sugeneruoti rezultata_
+
+lt pvz.:
+
+```
+Grybu kiekis pagal ivertinima:
+5 zvaigzdutes (labai gerai) - 5 grybai
+4 zvaigzdutes (gerai) - 7 grybai
+3 zvaigzdutes (normaliai) - 13 grybai
+```
+
+en pvz.:
+
+```
+Mushrooms count by rating:
+5 stars (perfect) - 5 mushrooms
+4 stars (good) - 7 mushrooms
+3 stars (ok) - 13 mushrooms
 ```

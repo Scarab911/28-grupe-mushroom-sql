@@ -44,7 +44,7 @@ app.init = async () => {
     [rows] = await connection.execute(sql);
     const gatherers = rows.map(obj => obj.name);
 
-    console.log('**************************************');
+    console.log('');
     console.log(`Grybautojai: ${gatherers.join(', ')}.`);
 
     // ** 3. ** _Isspausdinti, brangiausio grybo pavadinima_
@@ -58,12 +58,12 @@ app.init = async () => {
 
     [rows] = await connection.execute(sql);
 
-    console.log('********************************');
+    console.log('');
     console.log(`Brangiausias grybas yra: ${capitalize(rows[0].name)}.`);
 
     //**4.** _Isspausdinti, pigiausio grybo pavadinima_
     const last = rows.length - 1;
-    console.log('********************************');
+    console.log('');
     console.log(`Pigiausais grybas yra: ${rows[last].name}.`);
 
 
@@ -79,7 +79,7 @@ app.init = async () => {
     for (const { mushroom, kiekis } of rows) {
         allMushrooms.push(`${++count}) ${capitalize(mushroom)} - ${(+kiekis).toFixed(1)}`)
     }
-    console.log('*****************************');
+    console.log('');
     console.log('Grybai:');
     console.log(allMushrooms.join('\n'));
 
@@ -88,7 +88,7 @@ app.init = async () => {
             FROM`gatherer` \
             ORDER BY `id` ASC;';
 
-    const sql2 = 'SELECT `basket`.`gatherer_id` as grybautojas, `count`\
+    let sql2 = 'SELECT `basket`.`gatherer_id` as grybautojas, `count`\
             FROM`basket`\
             ORDER BY `gatherer_id` ASC;';
 
@@ -116,11 +116,63 @@ app.init = async () => {
     }
 
     let rowCount = 0;
-    console.log(`**************************************`);
+    console.log(``);
     console.log(`Grybu kiekis pas grybautoja:`);
     for (const { person, grybaiCount } of infoList) {
         console.log(`${++rowCount}) ${person} - ${grybaiCount} grybu`);
     }
+
+    //**7.** _Isspausdinti, visu grybautoju krepseliu kainas (issirikiuojant nuo brangiausio link pigiausio krepselio), suapvalinant iki centu_
+
+    sql = 'SELECT `gatherer`.`name`, SUM(`count`*`price`*`weight`/1000)as amount\
+            FROM `basket`\
+            LEFT JOIN `gatherer`\
+                ON `gatherer`.`id`=`basket`.`gatherer_id`\
+            LEFT JOIN `mushroom`\
+                ON `mushroom`.`id`= `basket`.`mushroom_id`\
+            GROUP BY `basket`.`gatherer_id`\
+            ORDER BY `amount` DESC';
+
+    [rows] = await connection.execute(sql);
+
+    rowCount = 0;
+
+    console.log('');
+    console.log(`Grybautojo krepselio kaina:`);
+    for (const { name, amount } of rows) {
+        console.log(`${++rowCount}) ${capitalize(name)} - ${(+amount).toFixed(2)} EUR`);
+    }
+
+    //**8** _Isspausdinti, kiek nuo geriausiai vertinamu iki blogiausiai vertinamu grybu yra surinkta. Spausdinimas turi atlikti funkcija (pavadinimu `mushroomsByRating()`), kuri gauna vieninteli parametra - kalbos pavadinima, pagal kuria reikia sugeneruoti rezultata_
+    console.log('');
+
+    async function mushroomByRating(lang) {
+
+        const langList = ['en', 'lt', 'esp', 'lv'];
+
+        lang = langList.includes(lang) ? lang : langList[0];
+
+        sql = 'SELECT `ratings`.`id`, `name_' + lang + '`, SUM(`count`) as amount\
+        FROM `ratings`\
+        LEFT JOIN `mushroom`\
+            ON `mushroom`.`rating`=`ratings`.`id`\
+        LEFT JOIN `basket`\
+            ON `basket`.`mushroom_id` =`mushroom`.`id`\
+        GROUP BY `ratings`.`id`\
+        ORDER BY `ratings`.`id` DESC';
+
+        [rows] = await connection.execute(sql);
+
+        if (lang === 'lt') {
+
+            console.log(`Grybu kiekis pagal ivertinima:`);
+            for () {
+                console.log(`5 zvaigzdutes (labai gerai) - 5 grybai`);
+            }
+        }
+    }
+    mushroomByRating('lt');
+    mushroomByRating('en');
 
 }
 
